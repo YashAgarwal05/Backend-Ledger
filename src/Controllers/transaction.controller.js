@@ -31,7 +31,11 @@ async function createTransaction(req, res) {
             message: "fromAccount, toAccount, amount and idempotencyKey are required"
         })
     }
-
+    if (amount <= 0) {
+    return res.status(400).json({
+        message: "Amount must be greater than 0"
+    })
+}
     const fromUserAccount = await accountModel.findOne({
         _id: fromAccount,
     })
@@ -45,6 +49,17 @@ async function createTransaction(req, res) {
             message: "Invalid fromAccount or toAccount"
         })
     }
+    if (fromUserAccount.user.toString() !== req.user._id.toString()) {
+        return res.status(403).json({
+            message: "You can only transfer from your own account"
+        })
+    }
+    if (fromAccount.toString() === toAccount.toString()) {
+        return res.status(400).json({
+            message: "Cannot transfer to the same account"
+        })
+    }
+    
 
     /**
      * 2. Validate idempotency key
@@ -175,6 +190,11 @@ async function createInitialFundsTransaction(req, res) {
             message: "toAccount, amount and idempotencyKey are required"
         })
     }
+    if (amount <= 0) {
+        return res.status(400).json({
+            message: "Amount must be greater than 0"
+        })
+    }
 
     const toUserAccount = await accountModel.findOne({
         _id: toAccount,
@@ -235,8 +255,56 @@ async function createInitialFundsTransaction(req, res) {
 
 
 }
+async function getTransactionHistory(req, res) {
+    try {
+
+        const accounts = await accountModel.find({
+            user: req.user._id
+        })
+
+        const accountIds = accounts.map(acc => acc._id)
+
+        const history = await ledgerModel
+            .find({
+                account: { $in: accountIds }
+            })
+            .populate({
+    path: "transaction",
+    populate: [
+        {
+            path: "fromAccount",
+            populate: {
+                path: "user",
+                select: "name"
+            }
+        },
+        {
+            path: "toAccount",
+            populate: {
+                path: "user",
+                select: "name"
+            }
+        }
+    ]
+})
+            .sort({ _id: -1 })
+
+        return res.status(200).json({
+            history
+        })
+
+    } catch (error) {
+
+        console.error(error)
+
+        return res.status(500).json({
+            message: "Failed to fetch history"
+        })
+    }
+}
 
 module.exports = {
     createTransaction,
-    createInitialFundsTransaction
+    createInitialFundsTransaction,
+    getTransactionHistory
 }
