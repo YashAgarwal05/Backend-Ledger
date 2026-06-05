@@ -45,10 +45,72 @@ async function getAccountBalanceController(req, res) {
         balance: balance
     })
 }
+async function getAccountDetailsController(req, res) {
+  const { accountId } = req.params
 
+  const account = await accountModel
+    .findById(accountId)
+    .populate("user", "name")
+
+  if (!account) {
+    return res.status(404).json({
+      message: "Account not found"
+    })
+  }
+
+  return res.status(200).json({
+    name: account.user.name
+  })
+}
+async function freezeAccountController(req, res) {
+    const { accountId } = req.params
+
+    const account = await accountModel.findOne({
+        _id: accountId,
+        user: req.user._id
+    })
+
+    if (!account) {
+        return res.status(404).json({
+            message: "Account not found"
+        })
+    }
+
+    account.status = "FROZEN"
+    await account.save()
+
+    return res.status(200).json({
+        message: "Account frozen successfully"
+    })
+}
+
+async function unfreezeAccountController(req, res) {
+    const { accountId } = req.params
+
+    const account = await accountModel.findOne({
+        _id: accountId,
+        user: req.user._id
+    })
+
+    if (!account) {
+        return res.status(404).json({
+            message: "Account not found"
+        })
+    }
+
+    account.status = "ACTIVE"
+    await account.save()
+
+    return res.status(200).json({
+        message: "Account activated successfully"
+    })
+}
 
 module.exports = {
     createAccountController,
     getUserAccountsController,
-    getAccountBalanceController
+    getAccountBalanceController,
+    getAccountDetailsController,
+    freezeAccountController,
+    unfreezeAccountController
 }

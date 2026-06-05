@@ -288,6 +288,7 @@ async function getTransactionHistory(req, res) {
     ]
 })
             .sort({ _id: -1 })
+            .limit(20)
 
         return res.status(200).json({
             history
