@@ -1,5 +1,5 @@
 const accountModel = require("../models/account.model");
-
+const mongoose = require("mongoose");
 
 async function createAccountController(req, res) {
 
@@ -47,6 +47,12 @@ async function getAccountBalanceController(req, res) {
 }
 async function getAccountDetailsController(req, res) {
   const { accountId } = req.params
+
+  if (!mongoose.Types.ObjectId.isValid(accountId)) {
+    return res.status(400).json({
+      message: "Invalid account id"
+    })
+  }
 
   const account = await accountModel
     .findById(accountId)
