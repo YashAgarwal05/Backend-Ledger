@@ -1,0 +1,151 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-ink-950 text-ink-100 font-body;
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(240,188,46,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 100%, rgba(240,188,46,0.03) 0%, transparent 50%);
+    min-height: 100vh;
+  }
+
+  ::selection {
+    @apply bg-gold-400/20 text-gold-300;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-ink-900;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-ink-600 rounded-full;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-ink-500;
+  }
+}
+
+@layer components {
+  .glass {
+    @apply bg-ink-800/60 backdrop-blur-xl border border-ink-700/50;
+  }
+
+  .glass-subtle {
+    @apply bg-ink-900/80 backdrop-blur-md border border-ink-800/60;
+  }
+
+  .btn-primary {
+    @apply relative inline-flex items-center justify-center gap-2 px-6 py-3
+           bg-gold-400 text-ink-950 font-body font-semibold text-sm
+           rounded-lg transition-all duration-200 overflow-hidden
+           hover:bg-gold-300 active:scale-[0.98]
+           disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100
+           focus:outline-none focus:ring-2 focus:ring-gold-400/50 focus:ring-offset-2 focus:ring-offset-ink-950;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3
+           bg-ink-800 text-ink-200 font-body font-medium text-sm
+           border border-ink-700 rounded-lg transition-all duration-200
+           hover:bg-ink-700 hover:text-ink-100 hover:border-ink-600 active:scale-[0.98]
+           disabled:opacity-50 disabled:cursor-not-allowed
+           focus:outline-none focus:ring-2 focus:ring-ink-500/50 focus:ring-offset-2 focus:ring-offset-ink-950;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2
+           text-ink-300 font-medium text-sm rounded-lg transition-all duration-200
+           hover:bg-ink-800 hover:text-ink-100 active:scale-[0.98]
+           focus:outline-none;
+  }
+
+  .btn-danger {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3
+           bg-rose-500/10 text-rose-400 font-medium text-sm
+           border border-rose-500/20 rounded-lg transition-all duration-200
+           hover:bg-rose-500/20 hover:border-rose-500/40 active:scale-[0.98]
+           focus:outline-none;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-3 bg-ink-900 border border-ink-700
+           text-ink-100 font-body text-sm rounded-lg
+           placeholder:text-ink-500 transition-colors duration-200
+           focus:outline-none focus:border-gold-500/60 focus:ring-2 focus:ring-gold-500/10
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  cursor: pointer;
+}
+
+  .label {
+    @apply block text-xs font-medium text-ink-300 mb-1.5 tracking-wide uppercase;
+  }
+
+  .card {
+    @apply glass rounded-2xl p-6 shadow-card transition-all duration-300;
+  }
+
+  .card-hover {
+    @apply hover:shadow-card-hover hover:border-ink-600/60 cursor-pointer;
+  }
+
+  .section-title {
+    @apply font-display text-2xl font-semibold text-ink-50;
+  }
+
+  .badge {
+    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium;
+  }
+
+  .badge-active {
+    @apply badge bg-emerald-500/15 text-emerald-300 border border-emerald-500/20;
+  }
+
+  .badge-frozen {
+    @apply badge bg-blue-500/15 text-blue-300 border border-blue-500/20;
+  }
+
+  .badge-closed {
+    @apply badge bg-rose-500/15 text-rose-400 border border-rose-500/20;
+  }
+
+  .divider {
+    @apply border-t border-ink-800;
+  }
+
+  .shimmer-line {
+    @apply rounded bg-ink-700/60;
+    background: linear-gradient(90deg, theme('colors.ink.800') 25%, theme('colors.ink.700') 50%, theme('colors.ink.800') 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+
+  .mono {
+    @apply font-mono text-sm;
+  }
+
+  .amount-positive {
+    @apply text-emerald-400 font-mono font-semibold;
+  }
+
+  .amount-neutral {
+    @apply text-gold-300 font-mono font-semibold;
+  }
+}

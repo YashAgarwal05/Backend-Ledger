@@ -1,5 +1,8 @@
 const nodemailer = require('nodemailer');
-
+console.log(process.env.EMAIL_USER)
+console.log(process.env.CLIENT_ID ? "CLIENT_ID OK" : "CLIENT_ID MISSING")
+console.log(process.env.CLIENT_SECRET ? "CLIENT_SECRET OK" : "CLIENT_SECRET MISSING")
+console.log(process.env.REFRESH_TOKEN ? "REFRESH_TOKEN OK" : "REFRESH_TOKEN MISSING")
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
